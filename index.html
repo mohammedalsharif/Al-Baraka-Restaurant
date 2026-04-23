@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مطعم البركة | القائمة الرقمية</title>
+    <meta name="description" content="قائمة مطعم البركة الرقمية — شاورما، مشاوي، وسلطات مع صور وأسعار محدثة.">
+    <meta name="theme-color" content="#0c0c0c">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #c59d5f; /* ذهبي فاخر */
+            --bg-body: #0c0c0c;
+            --bg-surface: #121212;
+            --bg-card: #161616;
+            --text-main: #ffffff;
+            --text-muted: rgba(255,255,255,0.72);
+            --text-dim: rgba(255,255,255,0.55);
+            --border: rgba(255,255,255,0.10);
+            --shadow: 0 18px 50px rgba(0,0,0,0.55);
+            --shadow-soft: 0 12px 30px rgba(0,0,0,0.40);
+            --radius-lg: 18px;
+            --radius-md: 14px;
+            --radius-sm: 12px;
+            --accent-red: #e74c3c;
+            --success: #2ecc71;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        html { scroll-behavior: smooth; }
+        body {
+            background:
+                radial-gradient(1200px 600px at 12% 6%, rgba(197,157,95,0.12), transparent 60%),
+                radial-gradient(900px 500px at 90% 10%, rgba(231,76,60,0.08), transparent 55%),
+                var(--bg-body);
+            color: var(--text-main);
+        }
+
+        a { color: inherit; }
+        img { display: block; }
+        ::selection { background: rgba(197,157,95,0.25); }
+
+        .skip-link {
+            position: absolute;
+            inset-inline-start: 12px;
+            top: 12px;
+            padding: 10px 12px;
+            background: #000;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transform: translateY(-150%);
+            transition: 160ms ease;
+            z-index: 2000;
+            text-decoration: none;
+        }
+        .skip-link:focus { transform: translateY(0); outline: none; box-shadow: var(--shadow-soft); }
+
+        /* الهيدر */
+        .hero {
+            min-height: 46vh;
+            background:
+                radial-gradient(900px 300px at 50% 30%, rgba(197,157,95,0.22), transparent 60%),
+                linear-gradient(to bottom, rgba(0,0,0,0.25), var(--bg-body)),
+                url('https://images.unsplash.com/photo-1598103442097-8b74394b95c6?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 28px 18px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+        }
+        .brand-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: linear-gradient(145deg, rgba(197,157,95,0.95), rgba(197,157,95,0.55));
+            box-shadow: 0 10px 25px rgba(197,157,95,0.22);
+            display: grid;
+            place-items: center;
+            color: #0b0b0b;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+        }
+        .hero h1 {
+            font-size: clamp(2.1rem, 3.6vw, 3.6rem);
+            color: var(--primary);
+            margin: 14px 0 10px;
+            text-shadow: 2px 2px 12px rgba(0,0,0,0.8);
+        }
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            font-weight: 700;
+            color: rgba(255,255,255,0.9);
+        }
+        .hero .meta {
+            margin-top: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(18,18,18,0.68);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: var(--text-muted);
+            backdrop-filter: blur(10px);
+        }
+        .pill strong { color: var(--text-main); }
+
+        /* القائمة العلوية */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(12, 12, 12, 0.86);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(14px);
+        }
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 12px 16px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.05rem;
+            padding: 10px 12px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            transition: 160ms ease;
+            white-space: nowrap;
+        }
+        nav a:hover { color: var(--text-main); border-color: rgba(197,157,95,0.22); background: rgba(197,157,95,0.10); }
+        nav a[aria-current="true"] { color: var(--text-main); background: rgba(197,157,95,0.14); border-color: rgba(197,157,95,0.28); }
+
+        .nav-tools {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .container { max-width: 1200px; margin: auto; padding: clamp(18px, 2.2vw, 28px) clamp(14px, 2vw, 20px) 56px; }
+
+        .section-header {
+            margin: 34px 0 16px;
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(197,157,95,0.20);
+            background:
+                radial-gradient(800px 120px at 30% 20%, rgba(197,157,95,0.16), transparent 60%),
+                rgba(18,18,18,0.68);
+            font-size: clamp(1.3rem, 2.2vw, 2rem);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .section-header small {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+        .section-header .count {
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.10);
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            background: rgba(0,0,0,0.15);
+        }
+
+        /* شبكة المنتجات */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: clamp(12px, 2.2vw, 26px);
+        }
+
+        .food-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent 50%), var(--bg-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+            border: 1px solid rgba(255,255,255,0.10);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            position: relative;
+        }
+
+        .food-card:hover { transform: translateY(-8px); border-color: rgba(197,157,95,0.40); box-shadow: var(--shadow); }
+
+        .media {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+        }
+        .food-card img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.02); transition: transform 220ms ease; }
+        .food-card:hover img { transform: scale(1.06); }
+        .media::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.62), rgba(0,0,0,0.00) 55%);
+        }
+
+        .card-content { padding: 14px 14px 16px; text-align: start; }
+        .title-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .card-content h3 { margin-bottom: 8px; font-size: 1.18rem; line-height: 1.35; }
+        .subtitle { color: var(--text-dim); font-size: 0.98rem; margin-bottom: 12px; }
+        
+        .price-box {
+            display: inline-block;
+            background: var(--primary);
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 1.1rem;
+        }
+
+        .badge {
+            position: absolute;
+            inset-inline-start: 12px;
+            top: 12px;
+            padding: 8px 10px;
+            border-radius: 999px;
+            background: rgba(0,0,0,0.55);
+            border: 1px solid rgba(255,255,255,0.16);
+            color: rgba(255,255,255,0.92);
+            font-weight: 900;
+            font-size: 0.95rem;
+            z-index: 1;
+            backdrop-filter: blur(8px);
+        }
+        .badge.featured { border-color: rgba(197,157,95,0.35); color: var(--primary); }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        .mini {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(0,0,0,0.15);
+            color: rgba(255,255,255,0.88);
+            cursor: pointer;
+            font-weight: 900;
+            transition: 160ms ease;
+        }
+        .chip:hover { border-color: rgba(197,157,95,0.35); background: rgba(197,157,95,0.10); }
+
+        .gallery {
+            margin: 26px 0 14px;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 18px;
+        }
+        .gallery-card {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(18,18,18,0.68);
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            min-height: 260px;
+        }
+        .gallery-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: saturate(1.05);
+        }
+        .gallery-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.75), rgba(0,0,0,0.15) 55%, rgba(0,0,0,0.05));
+        }
+        .gallery-content {
+            position: absolute;
+            inset-inline: 16px;
+            bottom: 16px;
+            z-index: 1;
+            display: grid;
+            gap: 8px;
+        }
+        .gallery-content h2 { color: var(--text-main); font-size: 1.55rem; }
+        .gallery-content p { color: var(--text-muted); font-size: 1.05rem; max-width: 55ch; }
+        .gallery-aside {
+            display: grid;
+            gap: 18px;
+        }
+        .info-card {
+            padding: 16px;
+            border-radius: var(--radius-lg);
+            background: rgba(18,18,18,0.68);
+            border: 1px solid rgba(255,255,255,0.10);
+            box-shadow: var(--shadow-soft);
+        }
+        .info-card h3 { color: var(--text-main); font-size: 1.2rem; margin-bottom: 8px; }
+        .info-card p, .info-card li { color: var(--text-muted); font-size: 1.02rem; line-height: 1.7; }
+        .info-card ul { padding-inline-start: 18px; margin-top: 10px; }
+        .hint { color: var(--text-dim); font-size: 0.98rem; margin-top: 8px; }
+
+        /* الجوال */
+        /* Large tablets / small laptops */
+        @media (max-width: 1024px) {
+            .hero { min-height: 40vh; }
+            .gallery { grid-template-columns: 1fr 1fr; }
+            .gallery-card { min-height: 300px; }
+        }
+
+        /* Tablets + large phones */
+        @media (max-width: 768px) {
+            .hero { min-height: 34vh; }
+            .nav-inner { padding: 10px 12px; justify-content: center; }
+            .nav-links { justify-content: center; }
+            .menu-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .media { height: 170px; }
+            .card-content h3 { font-size: 1rem; }
+            .gallery { grid-template-columns: 1fr; }
+        }
+
+        /* Small phones */
+        @media (max-width: 520px) {
+            .brand { width: 100%; justify-content: center; text-align: center; }
+            .brand > div:last-child { text-align: center !important; }
+            .nav-inner { gap: 8px; }
+            .nav-links {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                gap: 8px;
+                padding: 2px 2px 8px;
+            }
+            .nav-links::-webkit-scrollbar { height: 6px; }
+            .nav-links::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 999px; }
+            nav a { padding: 9px 10px; font-size: 1rem; }
+            .menu-grid { grid-template-columns: 1fr; }
+            .media { height: 190px; }
+            .section-header { padding: 12px 12px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { scroll-behavior: auto !important; transition: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <a class="skip-link" href="#menu">تخطي إلى القائمة</a>
+
+    <header class="hero" role="banner">
+        <div class="brand" aria-label="هوية مطعم البركة">
+            <div class="brand-badge" aria-hidden="true">ب</div>
+            <div style="text-align:start">
+                <div style="font-weight:900; letter-spacing:0.2px">مطعم البركة</div>
+                <div style="color: rgba(255,255,255,0.70); font-weight:700; font-size:0.98rem">قائمة رقمية — صور وأسعار</div>
+            </div>
+        </div>
+        <h1>البركة طعم فيه بركة</h1>
+        <p>اختَر صنفك بسرعة — تنقّل بين الأقسام بكل سلاسة</p>
+        <div class="meta" aria-label="معلومات سريعة">
+            <span class="pill">⏱️ <strong>جاهز بسرعة</strong> <span style="color:rgba(255,255,255,0.55)">حسب الطلب</span></span>
+            <span class="pill">🥩 <strong>مكونات طازجة</strong> <span style="color:rgba(255,255,255,0.55)">يوميًا</span></span>
+            <span class="pill">📍 <strong>خدمة محلية</strong> <span style="color:rgba(255,255,255,0.55)">داخل المدينة</span></span>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-inner">
+            <div class="nav-links" aria-label="أقسام القائمة">
+                <a href="#shawarma" data-nav="shawarma">الشاورما</a>
+                <a href="#grills" data-nav="grills">المشاوي</a>
+                <a href="#salads" data-nav="salads">السلطات</a>
+            </div>
+            <div class="nav-tools" aria-label="أدوات إضافية"></div>
+        </div>
+    </nav>
+
+    <main id="menu" class="container" role="main">
+
+        <section class="gallery" aria-label="صور ومعلومات">
+            <div class="gallery-card">
+                <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1600&q=80" alt="طبق شاورما مع إضافات">
+                <div class="gallery-content">
+                    <h2>اختيارات اليوم… بطابع فاخر</h2>
+                    <p>قائمة منظمة بصور واضحة لمساعدتك تختار بسرعة. اضغط على “عرض القسم” أسفل أي صنف للانتقال لقسمه مباشرة.</p>
+                </div>
+            </div>
+            <div class="gallery-aside">
+                <div class="info-card">
+                    <h3>كيف تستخدم القائمة؟</h3>
+                    <ul>
+                        <li>استخدم شريط الأقسام للانتقال السريع.</li>
+                        <li>الصور للعرض وقد تختلف بحسب التوفر.</li>
+                    </ul>
+                    <div class="hint">تلميح: ابدأ بالشاورما ثم جرّب المقبلات مع الطلب.</div>
+                </div>
+                <div class="info-card">
+                    <h3>عن المطعم</h3>
+                    <p>نركز على الطعم المتوازن والبهارات الدقيقة — شاورما، مشاوي، ومقبلات خفيفة تناسب كل طلب.</p>
+                </div>
+            </div>
+        </section>
+
+        <section aria-labelledby="shawarma">
+            <h2 class="section-header" id="shawarma">
+                <span>أصناف الشاورما</span>
+                <span class="count" id="count-shawarma">—</span>
+            </h2>
+            <div class="menu-grid" data-section="shawarma">
+                <article class="food-card" data-name="فرشوحة عادي" data-category="shawarma">
+                    <span class="badge">الأكثر طلبًا</span>
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1676300187013-7540d4e9440d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" data-fallback="https://images.unsplash.com/photo-1662116765994-1e4200c43369?auto=format&fit=crop&w=900&q=80" alt="فرشوحة شاورما عادي">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>فرشوحة عادي</h3>
+                            <span class="price-box">20 شيكل</span>
+                        </div>
+                        <div class="subtitle">شاورما بطعم متوازن وإضافات حسب الطلب</div>
+                        <div class="actions">
+                            <span class="mini">قسم: شاورما</span>
+                            <button class="chip" type="button" data-jump="#shawarma">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="food-card" data-name="فرشوحة دبل" data-category="shawarma">
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1621334953222-c60c19143b0a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" data-fallback="https://images.unsplash.com/photo-1593560704563-f176a2eb61db?auto=format&fit=crop&w=900&q=80" alt="فرشوحة شاورما دبل">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>فرشوحة دبل</h3>
+                            <span class="price-box">25 شيكل</span>
+                        </div>
+                        <div class="subtitle">كمية أكبر لعشاق الشاورما</div>
+                        <div class="actions">
+                            <span class="mini">قسم: شاورما</span>
+                            <button class="chip" type="button" data-jump="#shawarma">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="food-card" data-name="فرشوحة دبل لحمة" data-category="shawarma">
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://googleusercontent.com/image_collection/image_retrieval/12216585571126208535_0" data-fallback="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=900&q=80" alt="فرشوحة شاورما لحم">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>فرشوحة دبل لحمة</h3>
+                            <span class="price-box">30 شيكل</span>
+                        </div>
+                        <div class="subtitle">خيار غني لمحبي اللحمة</div>
+                        <div class="actions">
+                            <span class="mini">قسم: شاورما</span>
+                            <button class="chip" type="button" data-jump="#shawarma">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="food-card" data-name="صاروخ شاورما" data-category="shawarma">
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://googleusercontent.com/image_collection/image_retrieval/11943274735322740585_0" data-fallback="https://images.unsplash.com/photo-1561651823-34feb02250e4?auto=format&fit=crop&w=900&q=80" alt="صاروخ شاورما">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>صاروخ شاورما</h3>
+                            <span class="price-box">40 شيكل</span>
+                        </div>
+                        <div class="subtitle">حجم كبير ومشبع</div>
+                        <div class="actions">
+                            <span class="mini">قسم: شاورما</span>
+                            <button class="chip" type="button" data-jump="#shawarma">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="food-card" data-name="صفيحة شاورما" data-category="shawarma">
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1728657824680-f2ab468f5578?q=80&w=1926&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" data-fallback="https://images.unsplash.com/photo-1606850811984-2f22bd5d7967?auto=format&fit=crop&w=900&q=80" alt="صفيحة شاورما">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>صفيحة شاورما</h3>
+                            <span class="price-box">45 شيكل</span>
+                        </div>
+                        <div class="subtitle">تقديم مميز مناسب للمشاركة</div>
+                        <div class="actions">
+                            <span class="mini">قسم: شاورما</span>
+                            <button class="chip" type="button" data-jump="#shawarma">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="food-card" data-name="شاورما سوري" data-category="shawarma">
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1629450748686-c86699b710ac?q=80&w=2464&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" data-fallback="https://images.unsplash.com/photo-1561331899-72c03c553a92?auto=format&fit=crop&w=900&q=80" alt="شاورما سوري عربي">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>شاورما سوري</h3>
+                            <span class="price-box">40 شيكل</span>
+                        </div>
+                        <div class="subtitle">نكهة شامية ولمسة بهارات</div>
+                        <div class="actions">
+                            <span class="mini">قسم: شاورما</span>
+                            <button class="chip" type="button" data-jump="#shawarma">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="food-card" data-name="أساور شاورما" data-category="shawarma" data-featured="true">
+                    <span class="badge featured">مميز ✨</span>
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1664455248787-bed872761fa2?q=80&w=3131&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" data-fallback="https://images.unsplash.com/photo-1628191138407-293699c6c59d?auto=format&fit=crop&w=900&q=80" alt="أساور شاورما">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>أساور شاورما</h3>
+                            <span class="price-box">45 شيكل</span>
+                        </div>
+                        <div class="subtitle">شكل جذاب وتقديم فاخر</div>
+                        <div class="actions">
+                            <span class="mini">قسم: شاورما</span>
+                            <button class="chip" type="button" data-jump="#shawarma">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="food-card" data-name="كيلو شاورما" data-category="shawarma" data-featured="true">
+                    <span class="badge featured">حجم عائلي 👑</span>
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://plus.unsplash.com/premium_photo-1731512475641-191f7841512e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" data-fallback="https://images.unsplash.com/photo-1633383718081-22ac93e3dbf1?auto=format&fit=crop&w=900&q=80" alt="كيلو شاورما مشكل">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>كيلو شاورما</h3>
+                            <span class="price-box">180 شيكل</span>
+                        </div>
+                        <div class="subtitle">مناسب للعائلة والمناسبات</div>
+                        <div class="actions">
+                            <span class="mini">قسم: شاورما</span>
+                            <button class="chip" type="button" data-jump="#shawarma">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section aria-labelledby="grills">
+            <h2 class="section-header" id="grills">
+                <span>أصناف المشاوي</span>
+                <span class="count" id="count-grills">—</span>
+            </h2>
+            <div class="menu-grid" data-section="grills">
+                <article class="food-card" data-name="كباب" data-category="grills">
+                    <span class="badge">مفضل المشاوي</span>
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://plus.unsplash.com/premium_photo-1661310177352-f586bf23a403?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" data-fallback="https://images.unsplash.com/photo-1621345917822-171887e22138?auto=format&fit=crop&w=900&q=80" alt="كباب مشوي">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>كباب</h3>
+                            <span class="price-box">65 شيكل</span>
+                        </div>
+                        <div class="subtitle">مشوي على الفحم ببهارات متوازنة</div>
+                        <div class="actions">
+                            <span class="mini">قسم: مشاوي</span>
+                            <button class="chip" type="button" data-jump="#grills">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="food-card" data-name="شيش طاووق" data-category="grills">
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?q=80&w=2450&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" data-fallback="https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=900&q=80" alt="شيش طاووق">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>شيش طاووق</h3>
+                            <span class="price-box">70 شيكل</span>
+                        </div>
+                        <div class="subtitle">قطع دجاج طرية مع تتبيلة خاصة</div>
+                        <div class="actions">
+                            <span class="mini">قسم: مشاوي</span>
+                            <button class="chip" type="button" data-jump="#grills">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="food-card" data-name="جناح مشوي" data-category="grills">
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1592011432621-f7f576f44484?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" data-fallback="https://images.unsplash.com/photo-1601628002302-3f1d8560a80e?auto=format&fit=crop&w=900&q=80" alt="أجنحة دجاج مشوية">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>جناح مشوي</h3>
+                            <span class="price-box">30 شيكل</span>
+                        </div>
+                        <div class="subtitle">مقرمش من الخارج وطري من الداخل</div>
+                        <div class="actions">
+                            <span class="mini">قسم: مشاوي</span>
+                            <button class="chip" type="button" data-jump="#grills">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="food-card" data-name="أفخاذ دجاج مشوية" data-category="grills">
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://plus.unsplash.com/premium_photo-1695931844305-b5dd90ab6138?q=80&w=999&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" data-fallback="https://images.unsplash.com/photo-1603362191926-b75a613324c4?auto=format&fit=crop&w=900&q=80" alt="أفخاذ دجاج مشوية">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>أفخاذ دجاج مشوية</h3>
+                            <span class="price-box">60 شيكل</span>
+                        </div>
+                        <div class="subtitle">تتبيلة غنية ونكهة فحم</div>
+                        <div class="actions">
+                            <span class="mini">قسم: مشاوي</span>
+                            <button class="chip" type="button" data-jump="#grills">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="food-card" data-name="دبابيس دجاج مشوية" data-category="grills">
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1588767768269-22800153b449?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" data-fallback="https://images.unsplash.com/photo-1606854426293-8686e580e557?auto=format&fit=crop&w=900&q=80" alt="دبابيس دجاج مشوية">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>دبابيس دجاج مشوية</h3>
+                            <span class="price-box">60 شيكل</span>
+                        </div>
+                        <div class="subtitle">خيار مناسب للطلب السريع</div>
+                        <div class="actions">
+                            <span class="mini">قسم: مشاوي</span>
+                            <button class="chip" type="button" data-jump="#grills">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="food-card" data-name="دجاج كامل مشوي" data-category="grills">
+                    <span class="badge featured">قيمة ممتازة</span>
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1712579733874-c3a79f0f9d12?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" data-fallback="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=900&q=80" alt="دجاجة كاملة مشوية">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>دجاج كامل مشوي</h3>
+                            <span class="price-box">65 شيكل</span>
+                        </div>
+                        <div class="subtitle">مناسب للعائلة مع خيارات إضافات</div>
+                        <div class="actions">
+                            <span class="mini">قسم: مشاوي</span>
+                            <button class="chip" type="button" data-jump="#grills">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section aria-labelledby="salads">
+            <h2 class="section-header" id="salads">
+                <span>السلطات والمقبلات</span>
+                <span class="count" id="count-salads">—</span>
+            </h2>
+            <div class="menu-grid" data-section="salads">
+                <article class="food-card" data-name="حمص" data-category="salads">
+                    <span class="badge">خفيف</span>
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1603133872497-f29809b750bf?q=80&w=2013&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" data-fallback="https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=900&q=80" alt="صحن حمص">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>حمص</h3>
+                            <span class="price-box">5 شيكل</span>
+                        </div>
+                        <div class="subtitle">كلاسيك يليق مع كل طلب</div>
+                        <div class="actions">
+                            <span class="mini">قسم: مقبلات</span>
+                            <button class="chip" type="button" data-jump="#salads">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="food-card" data-name="سلطة ذرة مايونيز" data-category="salads">
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://peartreekitchen.com/wp-content/uploads/2019/03/Corn-Salad-3.jpg" data-fallback="https://images.unsplash.com/photo-1582234372722-50d7ccc30ebd?auto=format&fit=crop&w=900&q=80" alt="سلطة ذرة بالمايونيز">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>سلطة ذرة مايونيز</h3>
+                            <span class="price-box">5 شيكل</span>
+                        </div>
+                        <div class="subtitle">طعم لطيف يناسب الشاورما</div>
+                        <div class="actions">
+                            <span class="mini">قسم: مقبلات</span>
+                            <button class="chip" type="button" data-jump="#salads">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="food-card" data-name="ثومية" data-category="salads">
+                    <span class="badge featured">إضافة ضرورية</span>
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://cinnamonsnail.com/wp-content/uploads/2025/05/Toum-05.jpg" data-fallback="https://images.unsplash.com/photo-1616166330303-39d6ff5e43c6?auto=format&fit=crop&w=900&q=80" alt="كريم ثومية">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>ثومية</h3>
+                            <span class="price-box">5 شيكل</span>
+                        </div>
+                        <div class="subtitle">ثوم ناعم بقوام غني</div>
+                        <div class="actions">
+                            <span class="mini">قسم: مقبلات</span>
+                            <button class="chip" type="button" data-jump="#salads">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="food-card" data-name="بيكانتي" data-category="salads">
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://www.chilipeppermadness.com/wp-content/uploads/2026/01/Comeback-Sauce-Recipe1b.jpg" data-fallback="https://images.unsplash.com/photo-1551218372-a8789b81b253?auto=format&fit=crop&w=900&q=80" alt="سلطة بيكانتي">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>بيكانتي</h3>
+                            <span class="price-box">5 شيكل</span>
+                        </div>
+                        <div class="subtitle">حار خفيف لعشاق النكهة</div>
+                        <div class="actions">
+                            <span class="mini">قسم: مقبلات</span>
+                            <button class="chip" type="button" data-jump="#salads">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="food-card" data-name="سلطة تركية" data-category="salads">
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://horrah.com/wp-content/uploads/2023/06/السلطة-التركية-الحارة.jpg" data-fallback="https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=900&q=80" alt="سلطة تركية">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3>سلطة تركية</h3>
+                            <span class="price-box">5 شيكل</span>
+                        </div>
+                        <div class="subtitle">خضار طازجة ولمسة حامض</div>
+                        <div class="actions">
+                            <span class="mini">قسم: مقبلات</span>
+                            <button class="chip" type="button" data-jump="#salads">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="food-card" data-name="بندورة مشوية" data-category="salads">
+                    <div class="media">
+                        <img loading="lazy" decoding="async" src="https://www.petranightstours.com/uploads/images/cms/1656168007_1538568833_Galayet_Bandora.jpg" data-fallback="https://images.unsplash.com/photo-1588195126305-645391054b17?auto=format&fit=crop&w=900&q=80" alt="سلطة بندورة مشوية">
+                    </div>
+                    <div class="card-content">
+                        <div class="title-row">
+                            <h3> سلطة بندورة مشوية</h3>
+                            <span class="price-box">5 شيكل</span>
+                        </div>
+                        <div class="subtitle">نكهة فحم خفيفة مع رشّة ملح</div>
+                        <div class="actions">
+                            <span class="mini">قسم: مقبلات</span>
+                            <button class="chip" type="button" data-jump="#salads">عرض القسم</button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+    </main>
+
+    <footer style="text-align: center; padding: 44px 16px; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.10); margin-top: 24px; background: rgba(18,18,18,0.45);">
+        <div style="max-width:1200px; margin:0 auto; display:grid; gap:10px;">
+            <div style="font-weight:900; color:rgba(255,255,255,0.92)">مطعم البركة</div>
+            <div style="color:rgba(255,255,255,0.65)">للطلب والاستفسار: <span style="color:rgba(255,255,255,0.92); font-weight:800">ضع رقم الهاتف هنا</span></div>
+            <div style="color:rgba(255,255,255,0.55); font-size:0.98rem">جميع الحقوق محفوظة © مطعم البركة 2026</div>
+        </div>
+    </footer>
+
+    <script>
+        (function () {
+            const cards = Array.from(document.querySelectorAll('.food-card'));
+            const sectionCounts = {
+                shawarma: document.getElementById('count-shawarma'),
+                grills: document.getElementById('count-grills'),
+                salads: document.getElementById('count-salads'),
+            };
+
+            // Fallback images: if a hotlinked image is blocked/expired, swap to a stable URL.
+            const imgs = Array.from(document.querySelectorAll('img[data-fallback]'));
+            for (const img of imgs) {
+                img.addEventListener('error', () => {
+                    const fallback = img.getAttribute('data-fallback');
+                    if (!fallback) return;
+                    if (img.dataset.fallbackApplied === 'true') return;
+                    img.dataset.fallbackApplied = 'true';
+                    img.src = fallback;
+                }, { once: false });
+            }
+
+            function updateCounts(allCards) {
+                const perSection = { shawarma: 0, grills: 0, salads: 0 };
+                for (const c of allCards) {
+                    const cat = c.getAttribute('data-category');
+                    if (perSection[cat] !== undefined) perSection[cat] += 1;
+                }
+                sectionCounts.shawarma.textContent = `${perSection.shawarma} صنف`;
+                sectionCounts.grills.textContent = `${perSection.grills} صنف`;
+                sectionCounts.salads.textContent = `${perSection.salads} صنف`;
+            }
+
+            // Jump chips (keeps your filter focus on that section)
+            document.addEventListener('click', (e) => {
+                const btn = e.target && e.target.closest && e.target.closest('[data-jump]');
+                if (!btn) return;
+                const target = btn.getAttribute('data-jump');
+                const el = document.querySelector(target);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+
+            // Active nav link on scroll (simple + lightweight)
+            const sections = [
+                { id: 'shawarma', link: document.querySelector('a[data-nav="shawarma"]') },
+                { id: 'grills', link: document.querySelector('a[data-nav="grills"]') },
+                { id: 'salads', link: document.querySelector('a[data-nav="salads"]') },
+            ].filter(s => s.link);
+
+            const observer = new IntersectionObserver((entries) => {
+                const visible = entries.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+                if (!visible) return;
+                for (const s of sections) s.link.setAttribute('aria-current', 'false');
+                const active = sections.find(s => s.id === visible.target.id);
+                if (active) active.link.setAttribute('aria-current', 'true');
+            }, { root: null, threshold: [0.12, 0.2, 0.35, 0.5, 0.65] });
+
+            for (const s of sections) {
+                const el = document.getElementById(s.id);
+                if (el) observer.observe(el);
+            }
+
+            // Initial paint
+            updateCounts(cards);
+        })();
+    </script>
+
+</body>
+</html>
